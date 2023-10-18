@@ -637,5 +637,45 @@ public class Rendering_Tests
             string ExpectedOutput = "<h2>this is n!othing <input type=\"text\" id=\"formData_tbName1\" name=\"formData.tbName1\" value=\"\" required/>.</h2>\n";
             Assert.That(html, Is.EqualTo(ExpectedOutput));
         }
+
+        [Test]
+        public void Missing_Field_Name_with_ShowBlank_and_DesignatePopulatedFieldsReadOnly_false()
+        {
+            MarkdownPipeline pipeline;
+            string html = string.Empty;
+            string markdown;
+
+            markdown = "## this is n!othing !ASP-FOR[formData.tbName1CokeCan].";
+
+            AspForGeneratorOptions options = new AspForGeneratorOptions(newFormPrototype);
+            options.DesignatePopulatedFieldsReadOnly = false;
+            options.NullHandling = NullHandling.ShowBlank;
+
+            pipeline = new MarkdownPipelineBuilder().UseAspForGenerator(options).Build();
+
+            html = Markdown.ToHtml(markdown, pipeline);
+            string ExpectedOutput = "<h2>this is n!othing <input type=\"text\" id=\"formData_tbName1CokeCan\" name=\"formData.tbName1CokeCan\" value=\"\" />.</h2>\n";
+            Assert.That(html, Is.EqualTo(ExpectedOutput));
+        }
+
+        [Test]
+        public void Missing_Field_Name_with_ShowBlank_and_DesignatePopulatedFieldsReadOnly_true()
+        {
+            MarkdownPipeline pipeline;
+            string html = string.Empty;
+            string markdown;
+
+            markdown = "## this is n!othing !ASP-FOR[formData.tbName1CokeCan].";
+
+            AspForGeneratorOptions options = new AspForGeneratorOptions(newFormPrototype);
+            options.DesignatePopulatedFieldsReadOnly = true;
+            options.NullHandling = NullHandling.ShowBlank;
+
+            pipeline = new MarkdownPipelineBuilder().UseAspForGenerator(options).Build();
+
+            html = Markdown.ToHtml(markdown, pipeline);
+            string ExpectedOutput = "<h2>this is n!othing <input type=\"text\" id=\"formData_tbName1CokeCan\" name=\"formData.tbName1CokeCan\" value=\"\" readonly />.</h2>\n";
+            Assert.That(html, Is.EqualTo(ExpectedOutput));
+        }
     }
 }

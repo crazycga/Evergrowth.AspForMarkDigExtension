@@ -75,7 +75,7 @@ public class AspForRenderer : HtmlObjectRenderer<AspForGenerator>
 
             var valueResponse = AspForUtilities.GetPropertyValueAndAttributes(_aspForGeneratorOptions, _aspForGeneratorOptions.ASPModel, modelReference, out objInfo);
 
-            // if the attribute is set to ignore, write it out and return.
+            // if the attribute is set to ignore, write it out and return.  Also, if the object isn't found, skip it and leave the original code.
             if ((objInfo != null) && (objInfo.Ignore == true))
             {
                 renderer.Write(obj.InputString);
@@ -88,7 +88,7 @@ public class AspForRenderer : HtmlObjectRenderer<AspForGenerator>
                 {
                     case NullHandling.ShowBlank:
                         valueOutput = String.Empty;
-                        inputType = objInfo.DerivedHTMLType;
+                        inputType = objInfo != null ? objInfo.DerivedHTMLType : "text";
                         break;
 
                     case NullHandling.ShowWarning:
@@ -189,7 +189,7 @@ public class AspForRenderer : HtmlObjectRenderer<AspForGenerator>
             }
 
             // add readonly attribute if required
-            if ((this._aspForGeneratorOptions.DesignatePopulatedFieldsReadOnly) || (objInfo.ReadOnly == true))
+            if (objInfo != null && ((this._aspForGeneratorOptions.DesignatePopulatedFieldsReadOnly) || (objInfo.ReadOnly == true)))
             {
                 tempReturn = tempReturn.Replace(READONLY_REPLACEMENTTOKEN, READONLY_PROTOTYPE);
             }

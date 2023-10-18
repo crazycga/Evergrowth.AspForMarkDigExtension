@@ -23,22 +23,40 @@ defaults:
         shell: pwsh
         
 jobs:
-    create_nuget:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v3
-              with:
-                fetch-depth: 0
-                
-            - name: Install / setup .NET
-              uses: actions/setup-dotnet@v3
-              
-            - run: dotnet pack --configuration Release --output ${{ env.NuGetDirectory }}
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+      
+    
+  create_nuget:
+    runs-on: ubuntu-latest
+    steps:
+        - uses: actions/checkout@v3
+          with:
+              fetch-depth: 0
             
-            - uses: actions/upload-artifact@v3
-              with:
-                name: nuget
-                if-no-files-found: error
-                retention-days: 7
-                path: ${{ env.NuGetDirectory }}/*.nupkg
-                
+        - name: Install / setup .NET
+          uses: actions/setup-dotnet@v3
+          
+        - run: dotnet pack --configuration Release --output ${{ env.NuGetDirectory }}
+        
+        - uses: actions/upload-artifact@v3
+          with:
+            name: nuget
+            if-no-files-found: error
+            retention-days: 7
+            path: ${{ env.NuGetDirectory }}/*.nupkg
+        

@@ -677,5 +677,25 @@ public class Rendering_Tests
             string ExpectedOutput = "<h2>this is n!othing <input type=\"text\" id=\"formData_tbName1CokeCan\" name=\"formData.tbName1CokeCan\" value=\"\" readonly />.</h2>\n";
             Assert.That(html, Is.EqualTo(ExpectedOutput));
         }
+
+        [Test]
+        public void Missing_Field_Name_with_RemoveEntirely()
+        {
+            MarkdownPipeline pipeline;
+            string html = string.Empty;
+            string markdown;
+
+            markdown = "## this is n!othing !ASP-FOR[formData.tbName1CokeCan].";
+
+            AspForGeneratorOptions options = new AspForGeneratorOptions(newFormPrototype);
+            options.DesignatePopulatedFieldsReadOnly = true;
+            options.NullHandling = NullHandling.RemoveEntirely;
+
+            pipeline = new MarkdownPipelineBuilder().UseAspForGenerator(options).Build();
+
+            html = Markdown.ToHtml(markdown, pipeline);
+            string ExpectedOutput = "<h2>this is n!othing .</h2>\n";
+            Assert.That(html, Is.EqualTo(ExpectedOutput));
+        }
     }
 }

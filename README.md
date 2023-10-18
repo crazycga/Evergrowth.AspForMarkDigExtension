@@ -44,9 +44,10 @@ The ```AspForGeneratorOptions.NullHandling``` field controls the behavior of the
 
 | Option | Function |
 |---|---|
-| ```ShowBlank (default)``` | This will entirely eliminate the unfound reference tag in the markdown. |
+| ```ShowBlank (default)``` | This will place an input field with the value of the tag regardless of whether the tag exists in the data model or not.  If it does not know what input type to use, it will default to ```text```, and obviously will lack a value. |
 | ```ShowWarning``` | This will replace the value of the unfound reference tag with the verbiage contained in the ```WarningMessage``` field.  That field will replace a {0} tag with the name of the reference field that the renderer could not find. |
 | ```ShowError``` | If the renderer does not find the field in the reference tag, it will throw a new ```ArgumentNullException``` with the name of the field reference it could not find. |
+| ```RemoveEntirely``` | This will entirely eliminate the unfound reference tag in the markdown. |
 
 ### Maximum Reference Length
 In order to prevent the parser from hanging if there is an unclosed !ASP-FOR[] tag, the system will stop checking after this length of string.  The default is 100 characters.  Note that since this parser will recurse through objects to find the reference, this could become quite a large number.  As an example, ```formData.ProviderCompany.Provider.FirstName``` is 43 characters long.  If the parser is running slowly, and the programmer knows the maximum length of reference names, it can be set lower; alternatively, if there are reference names longer than 100 characters, it can be set longer.

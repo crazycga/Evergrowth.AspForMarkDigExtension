@@ -3,5 +3,6 @@ public enum NullHandling
 {
     ShowBlank,
     ShowWarning,
-    ShowError
+    ShowError,
+    RemoveEntirely
 }

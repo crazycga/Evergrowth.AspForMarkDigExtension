@@ -100,6 +100,10 @@ public class AspForRenderer : HtmlObjectRenderer<AspForGenerator>
                         throw new ArgumentNullException(nameof(modelReference));
                         break;
 
+                    case NullHandling.RemoveEntirely:
+                        renderer.Write(String.Empty);
+                        return;
+
                     default:
                         throw new ArgumentNullException(nameof(modelReference));
                         break;

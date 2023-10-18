@@ -193,7 +193,7 @@ public class AspForRenderer : HtmlObjectRenderer<AspForGenerator>
             }
 
             // add readonly attribute if required
-            if (objInfo != null && ((this._aspForGeneratorOptions.DesignatePopulatedFieldsReadOnly) || (objInfo.ReadOnly == true)))
+            if ((this._aspForGeneratorOptions.DesignatePopulatedFieldsReadOnly) || (objInfo != null ? objInfo.ReadOnly == true : false))
             {
                 tempReturn = tempReturn.Replace(READONLY_REPLACEMENTTOKEN, READONLY_PROTOTYPE);
             }

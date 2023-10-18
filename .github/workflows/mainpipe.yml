@@ -38,7 +38,7 @@ jobs:
     - name: Build
       run: dotnet build --no-restore --output ${{ env.NuGetDirectory }} 
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal --output ${{ env.NuGetDirectory }} 
 
          
     - run: dotnet pack --configuration Release --output ${{ env.NuGetDirectory }}

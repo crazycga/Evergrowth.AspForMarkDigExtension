@@ -21,7 +21,7 @@ jobs:
     - name: Execute tests
       run: dotnet test --configuration Release /p:Version=${VERSION} --no-build
     - name: Pack the package
-      run: dotnet pack --configuration Release /p:Version=${VERSION} --no-build --ouput .
+      run: dotnet pack --configuration Release /p:Version=${VERSION} --no-build --output .
     - name: Push package
       run: dotnet nuget push Evergrowth.AspForMarkDigExtension.${VERSION}.nupkg --source https://api.nuget.org/v3/index.json --api-key ${NUGET_API_KEY)
       env:

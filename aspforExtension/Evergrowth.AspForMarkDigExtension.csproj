@@ -10,13 +10,15 @@
     <Authors>crazycga</Authors>
     <Company>Evergrowth Consulting</Company>
     <Product>AspForMarkDigExtension</Product>
-    <Description>This is a private little thing, nothing to see here, really.</Description>
+    <Description>An extension to the MarkDig markdown processor that will enable a programmer to embed asp-for input actions strongly typed to the model using markdown-style tags.</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageReleaseNotes>I'm parking this here so I can access it elsewhere.</PackageReleaseNotes>
+    <PackageReleaseNotes>The source repository is on GitHub and has the most up-to-date information about this package.</PackageReleaseNotes>
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <FileVersion>1.0.0</FileVersion>
     <PackageId>Evergrowth.AspForMarkDigExtension</PackageId>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/crazycga/Evergrowth.AspForMarkDigExtension</RepositoryUrl>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 

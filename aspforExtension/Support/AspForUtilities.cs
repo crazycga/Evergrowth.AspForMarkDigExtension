@@ -5,8 +5,16 @@ using System.Data;
 using System.Text;
 
 namespace Evergrowth.AspForMarkDigExtension.Support;
+
+/// <summary>
+/// This utilities class contains various utilities used by and within the <see cref="Evergrowth.AspForMarkDigExtension"/>
+/// </summary>
 public static class AspForUtilities
 {
+    /// <summary>
+    /// This struct is used to describe an <see cref="AspForGeneratorOptions.ASPModel"/> sub-component in a way that the <see cref="Evergrowth.AspForMarkDigExtension"/> understands.
+    /// It contains the resulting settings that are required to properly understand what kind of input HTML to generate.
+    /// </summary>
     public class AspForObjectInfo_struct
     {
         public bool? ReadOnly { get; set; }
@@ -81,6 +89,13 @@ public static class AspForUtilities
         return new object();
     }
 
+    /// <summary>
+    /// Returns the value of the <see cref="AspForCheckedValueAttribute"/> (if any) that is associated to the specific object passed in.
+    /// </summary>
+    /// <param name="referenceObject">A sub-piece of the <see cref="AspForGeneratorOptions.ASPModel"/> object.</param>
+    /// <param name="referenceName">The actual code name of the object to exmaine.  Example: formData.thisIsMyCheckbox</param>
+    /// <returns>The value of the <see cref="AspForCheckedValueAttribute"/> if it exists on the object.</returns>
+    /// <exception cref="ArgumentException">Returned if the attribute is added to a non-boolean type object.</exception>
     public static string BooleanCheckedValue(object? referenceObject, string? referenceName)
     {
         Type propertyType = Nullable.GetUnderlyingType(referenceObject.GetType()) ?? referenceObject.GetType();
@@ -91,10 +106,15 @@ public static class AspForUtilities
             throw new ArgumentException("CheckedValue attribute is only valid on boolean type properties.", referenceName);
         }
 
-        //AspForCheckedValueAttribute checkAttribute
         return String.Empty;
     }
 
+    /// <summary>
+    /// This routine extracts the object information that is passed to it as a version of <see cref="AspForObjectInfo_struct" /> that will expose the information required for other routines.
+    /// </summary>
+    /// <param name="_options">The current <see cref="AspForGeneratorOptions" /> that is in use.</param>
+    /// <param name="referenceObject">The object that is part of what is in the <see cref="AspForGeneratorOptions.ASPModel"/> to be examined.  Example: formData.thisIsMyStringField.</param>
+    /// <returns><see cref="AspForObjectInfo_struct"/> containing information about the object.</returns>
     public static AspForObjectInfo_struct ExtractObjectInfo(AspForGeneratorOptions _options, System.Reflection.PropertyInfo? referenceObject)
     {
         AspForObjectInfo_struct tempReturn = new AspForObjectInfo_struct();
@@ -179,7 +199,12 @@ public static class AspForUtilities
         return tempReturn;
     }
 
-    private static string ParseDateTime_UsingOverride(DateTimeOverride _option)
+    /// <summary>
+    /// Converter to decide between date, time and datetime-local.  Provides a response based on the DateTimeOverride field.
+    /// </summary>
+    /// <param name="_option">The DateTimeOverride to be converted.</param>
+    /// <returns>"date", "time" or "datetime-local" depending on input; DEFAULT: "date"</returns>
+    public static string ParseDateTime_UsingOverride(DateTimeOverride _option)
     {
         switch (_option)
         {

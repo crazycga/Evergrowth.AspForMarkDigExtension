@@ -47,11 +47,6 @@ public class AspForInlineParser : InlineParser
 
             checkHeader = slice.CurrentChar.ToString();
 
-            // TODO: how to handle if the user didn't close the bracket? 
-            // TODO: note that this is happy-path.  Everything works properly because the sample is closed and has a space after.
-            // TODO: check to see what happens when an exclamation point is at the end of a line.
-            // TODO: check to see what happens when an exclamation point is at the end of the document.
-
             // determine if next characters conform to sample
             for (int i = 0; i < sample_header.Length - 1; i++)
             {

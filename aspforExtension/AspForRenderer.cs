@@ -51,8 +51,6 @@ public class AspForRenderer : HtmlObjectRenderer<AspForGenerator>
 
     protected override void Write(HtmlRenderer renderer, AspForGenerator obj)
     {
-        // TODO: the RENDERER needs to know that it was just passed the ENTIRE tag, including the model name.  Parse out the model name.
-
         // first step: determine if model is empty; if so, bust out.
         if (_aspForGeneratorOptions == null) { return; }
 

@@ -35,7 +35,7 @@ public class AspForInlineParser : InlineParser
 
         previous = slice.PeekCharExtra(-1);
 
-        if (previous.IsWhiteSpaceOrZero())          // departure from tutorial; he has ( and [ listed.
+        if (previous.IsWhiteSpaceOrZero())          // this requires the ! to be preceeded by a space.  This helps prevent the parser from examining the proper use of exclamation points.
         {
             char current;
             int start;

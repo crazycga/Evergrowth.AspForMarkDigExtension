@@ -14,6 +14,7 @@ public class AspForGeneratorOptions
     private uint _maxReferenceLength = 100;
     private DateTimeOverride _dateTimeOverride = DateTimeOverride.AsDate;
     private string? _defaultCheckedChecboxValue = true.ToString();
+    private EnumHandling _defaultEnumHandling = EnumHandling.AsRadioButtons;
 
     public AspForGeneratorOptions(object model)
     {
@@ -117,6 +118,18 @@ public class AspForGeneratorOptions
         set
         {
             this._defaultCheckedChecboxValue = value;
+        }
+    }
+
+    public EnumHandling EnumHandling
+    {
+        get
+        {
+            return this._defaultEnumHandling;
+        }
+        set
+        {
+            this._defaultEnumHandling = value;
         }
     }
 }

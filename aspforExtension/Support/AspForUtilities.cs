@@ -2,6 +2,7 @@
 using Evergrowth.AspForMarkDigExtension.Enums;
 using System.ComponentModel;
 using System.Data;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace Evergrowth.AspForMarkDigExtension.Support;
@@ -96,18 +97,34 @@ public static class AspForUtilities
     /// <param name="referenceName">The actual code name of the object to exmaine.  Example: formData.thisIsMyCheckbox</param>
     /// <returns>The value of the <see cref="AspForCheckedValueAttribute"/> if it exists on the object.</returns>
     /// <exception cref="ArgumentException">Returned if the attribute is added to a non-boolean type object.</exception>
-    public static string BooleanCheckedValue(object? referenceObject, string? referenceName)
+    public static string BooleanCheckedValue(AspForGeneratorOptions options, object? referenceObject, string? referenceName)
     {
-        Type propertyType = Nullable.GetUnderlyingType(referenceObject.GetType()) ?? referenceObject.GetType();
-        string propertyTypeName = propertyType.Name;
+        AspForObjectInfo_struct tempObjectInfo = new AspForObjectInfo_struct();
 
-        if (propertyTypeName != "Boolean")
+        GetPropertyValueAndAttributes(options, referenceObject, referenceName, out tempObjectInfo);
+
+        if (tempObjectInfo.PropertyType.Name != "Boolean")
         {
             throw new ArgumentException("CheckedValue attribute is only valid on boolean type properties.", referenceName);
         }
 
+        return tempObjectInfo.CheckedValue ?? String.Empty;
+    }
+
+    
+    public static string RadioButtonValue(object? referenceObject, string? referenceName)
+    {
+        Type propertyType = Nullable.GetUnderlyingType(referenceObject.GetType())?? referenceObject.GetType();
+        string propertyTypeName = propertyType.Name;
+
+        if (propertyTypeName != "Enum")
+        {
+            throw new ArgumentException("RadioButtonValue attribute is only valid on enum type properties.", referenceName);
+        }
+
         return String.Empty;
     }
+
 
     /// <summary>
     /// This routine extracts the object information that is passed to it as a version of <see cref="AspForObjectInfo_struct" /> that will expose the information required for other routines.

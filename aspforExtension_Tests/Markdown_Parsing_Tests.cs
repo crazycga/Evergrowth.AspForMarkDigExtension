@@ -105,10 +105,22 @@ public class Parsing_Tests
             string CheckedValue;
             AspForGeneratorOptions options = new AspForGeneratorOptions(newFormPrototype);
 
-            var ex = Assert.Throws<ArgumentException>(() => CheckedValue = AspForUtilities.BooleanCheckedValue(newFormPrototype.formData.tbAcceptanceInitials3, nameof(newFormPrototype.formData.tbAcceptanceInitials3)));
+            var ex = Assert.Throws<ArgumentException>(() => CheckedValue = AspForUtilities.BooleanCheckedValue(options, newFormPrototype, "formData.tbAcceptanceInitials3"));
             RefreshTestObject();
 
-            Assert.That(ex.Message, Is.EqualTo("CheckedValue attribute is only valid on boolean type properties. (Parameter 'tbAcceptanceInitials3')"));
+            Assert.That(ex.Message, Is.EqualTo("CheckedValue attribute is only valid on boolean type properties. (Parameter 'formData.tbAcceptanceInitials3')"));
+        }
+
+        [Test]
+        public void Check_CheckedValue_Attribute_Function_On_Boolean()
+        {
+            newFormPrototype.formData.cbYesNo3 = true;
+            AspForGeneratorOptions options = new AspForGeneratorOptions(newFormPrototype);
+
+            var returnValue = AspForUtilities.BooleanCheckedValue(options, newFormPrototype, "formData.cbYesNo3");
+            RefreshTestObject();
+
+            Assert.That(returnValue, Is.EqualTo("Excluded"));
         }
 
         [Test]

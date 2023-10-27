@@ -260,6 +260,4 @@ public class AspForRenderer : HtmlObjectRenderer<AspForGenerator>
         tempReturn = incoming.Substring(firstBracket + 1, lastBracket - firstBracket - 1);
         return tempReturn;
     }
-
-
 }

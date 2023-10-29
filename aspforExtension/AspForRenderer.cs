@@ -5,6 +5,8 @@ using Markdig.Helpers;
 using Markdig.Renderers;
 using Markdig.Renderers.Html;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Evergrowth.AspForMarkDigExtension;
@@ -49,6 +51,15 @@ public class AspForRenderer : HtmlObjectRenderer<AspForGenerator>
         _aspForGeneratorOptions = aspForGeneratorOptions;
     }
 
+    /// <summary>
+    /// TagData contains information about the model reference name and the listValue that should be in braces.
+    /// </summary>
+    private struct TagData
+    {
+        public string modelReference;
+        public string listValue;
+    }
+
     protected override void Write(HtmlRenderer renderer, AspForGenerator obj)
     {
         // first step: determine if model is empty; if so, bust out.
@@ -58,7 +69,9 @@ public class AspForRenderer : HtmlObjectRenderer<AspForGenerator>
 
         AspForReference = obj.InputString;
 
-        string modelReference = ExtractReferenceName(obj.InputString.ToString());
+        TagData TagDataExtract = ExtractReferenceName(obj.InputString.ToString());
+
+        string modelReference = TagDataExtract.modelReference;
 
         if (String.IsNullOrEmpty(modelReference)) { return; }
 
@@ -247,8 +260,9 @@ public class AspForRenderer : HtmlObjectRenderer<AspForGenerator>
     /// </summary>
     /// <param name="incoming">The markdown tag in its entirety.</param>
     /// <returns>The field name contained betweeen the brackets.</returns>
-    private string ExtractReferenceName(string incoming)
+    private TagData ExtractReferenceName(string incoming)
     {
+        TagData tempTagData = new TagData();
         string tempReturn = String.Empty;
         int firstBracket = 0;
         int lastBracket = 0;
@@ -256,8 +270,54 @@ public class AspForRenderer : HtmlObjectRenderer<AspForGenerator>
         firstBracket = incoming.IndexOf(LEFTSIDE_INDICATOR);
         lastBracket = incoming.IndexOf(RIGHTSIDE_INDICATOR);
 
-        if ((firstBracket == -1) || (lastBracket == -1)) { return tempReturn; }
+        if ((firstBracket == -1) || (lastBracket == -1)) { return new TagData(); }
         tempReturn = incoming.Substring(firstBracket + 1, lastBracket - firstBracket - 1);
+        
+        tempTagData.modelReference = tempReturn;
+
+        tempTagData.listValue = ExtractListValueIfExists(incoming);
+        
+        if (!String.IsNullOrEmpty(tempTagData.listValue))
+        {
+            tempTagData.modelReference = tempTagData.modelReference.Replace(tempTagData.listValue, String.Empty);
+        }
+
+        // always replace the brackets and quotes, because we can't necessarily tell if we didn't receive a response back or if one didn't exist
+        tempTagData.modelReference = tempTagData.modelReference.Replace("(", "").Replace("\"", "").Replace(")", "");
+
+        Trace.TraceInformation("Extracted tag model reference of \"{0}\" and list value of \"{1}\" from tag \"{2}\"; returning.", tempTagData.modelReference, tempTagData.listValue, incoming); ;
+
+        return tempTagData;
+    }
+
+    private string ExtractListValueIfExists(string incoming)
+    {
+        string tempReturn = String.Empty;
+        int firstBrace = 0;
+        int lastBrace = 0;
+        int firstQuote = 0;
+        int lastQuote = 0;
+
+        // check for braces, if they exist
+        firstBrace = incoming.IndexOf('(');
+        lastBrace = incoming.IndexOf(')');
+
+        // if they don't both exist, break out
+        if ((firstBrace == -1) || (firstBrace == -1)) { return tempReturn; }
+
+        // extract what's between the braces
+        tempReturn = incoming.Substring(firstBrace + 1, lastBrace - firstBrace - 1);
+
+        // check for quotes, if they exist
+        firstQuote = incoming.IndexOf("\"");
+        lastQuote = incoming.IndexOf("\"", firstQuote + 1);
+
+        // if they don't both exist, break out
+        if ((firstQuote == -1) || (lastQuote == -1)) { return tempReturn; };
+
+        // extract what's between the quotes
+        tempReturn = incoming.Substring(firstQuote + 1, lastQuote - firstQuote - 1);
+
         return tempReturn;
     }
 }

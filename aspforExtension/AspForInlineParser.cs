@@ -5,9 +5,9 @@ namespace Evergrowth.AspForMarkDigExtension;
 public class AspForInlineParser : InlineParser
 {
     /// <summary>
-    /// Full sample to see what the intended use-case is.
+    /// Full sample to see what the intended use-case is.  "listValue" is designed to be used with radio button groups and dropdown lists.
     /// </summary>
-    private static readonly string sample = "!ASP-FOR[myname]";
+    private static readonly string sample = "!ASP-FOR[myname(\"listValue\")]";
 
     /// <summary>
     /// Sample header against which the parser checks.

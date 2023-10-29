@@ -69,7 +69,6 @@ public class Parsing_Tests
             Assert.That(objInfo.ReadOnly, Is.True);
         }
 
-
         [Test]
         public void Check_CheckedValue_Attribue_Functional()
         {
@@ -211,5 +210,6 @@ public class Parsing_Tests
 
             Assert.That(objInfo.Required, Is.False);
         }
+
     }
 }

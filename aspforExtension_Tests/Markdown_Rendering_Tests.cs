@@ -697,5 +697,52 @@ public class Rendering_Tests
             string ExpectedOutput = "<h2>this is n!othing .</h2>\n";
             Assert.That(html, Is.EqualTo(ExpectedOutput));
         }
+
+
+        [Test]
+        public void Check_CompletedListValueTag_in_Tag()
+        {
+            MarkdownPipeline pipeline;
+            string html = string.Empty;
+            string markdown;
+
+            // GIVEN: an AspForGeneratorOptions options object
+            AspForGeneratorOptions options = new AspForGeneratorOptions(newFormPrototype);
+
+            // GIVEN: an !ASP-FOR[] tag that contains an empty list value
+            markdown = "this is !ASP-FOR[formData.tbRandomName(\"thisHere\")] inserted here.";
+
+            // WHEN: the parser runs against it
+            pipeline = new MarkdownPipelineBuilder().UseAspForGenerator(options).Build();
+
+            html = Markdown.ToHtml(markdown, pipeline);
+            string ExpectedOutput = "<p>this is <input type=\"text\" id=\"formData_tbRandomName\" name=\"formData.tbRandomName\" value=\"Person McPersonFace\" readonly /> inserted here.</p>\n";
+
+            // THEN: the parser will still correclty function
+            Assert.That(html, Is.EqualTo(ExpectedOutput));
+        }
+
+        [Test]
+        public void Check_EmptyListValueTag_in_Tag()
+        {
+            MarkdownPipeline pipeline;
+            string html = string.Empty;
+            string markdown;
+
+            // GIVEN: an AspForGeneratorOptions options object
+            AspForGeneratorOptions options = new AspForGeneratorOptions(newFormPrototype);
+
+            // GIVEN: an !ASP-FOR[] tag that contains an empty list value
+            markdown = "this is !ASP-FOR[formData.tbRandomName(\"\")] inserted here.";
+
+            // WHEN: the parser runs against it
+            pipeline = new MarkdownPipelineBuilder().UseAspForGenerator(options).Build();
+
+            html = Markdown.ToHtml(markdown, pipeline);
+            string ExpectedOutput = "<p>this is <input type=\"text\" id=\"formData_tbRandomName\" name=\"formData.tbRandomName\" value=\"Person McPersonFace\" readonly /> inserted here.</p>\n";
+
+            // THEN: the parser will still correclty function
+            Assert.That(html, Is.EqualTo(ExpectedOutput));
+        }
     }
 }
